@@ -33,9 +33,8 @@ def main(argv):
     'cross_entropy',
     0.1, 0.0001, 0.00001)
 
-    nn.train(flat_images, labels, 20, 8)
+    nn.train(flat_images, labels, 10, 2)
 
-    print(np.max(nn.layers[0].W))
     A = nn.feedforward(flat_images[0])
     print("Estimation:", A.argmax(), "| Ground Truth:", labels[0])
     A = nn.feedforward(flat_images[1])

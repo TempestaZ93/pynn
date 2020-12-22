@@ -71,11 +71,13 @@ class Model(object):
                     
                     A = self.feedforward(c_X)
                     loss = self.d_loss(c_y, A)
-                    dA += loss + self.regL1 * weight_sum + self.regL2 * weight_sum_sq
+                    dA += loss
 
-                    print(epoch + 1, ":", batch + 1, "-", i + 1, end='\r')
+                    print(epoch + 1, ":", batch + 1, "-", i + 1, "          ", end='\r')
+                
                 
                 dA = dA / curr_batch_size
+                dA +=  + self.regL1 * weight_sum + self.regL2 * weight_sum_sq
 
                 self._optimize(dA)
                 batch = batch + 1
