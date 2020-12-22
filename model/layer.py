@@ -7,11 +7,6 @@ class Layer(object):
     def __init__(self, inputs: int, neurons: int, activation: str):
         self.W = np.random.randn(neurons, inputs)
         
-        self.W = np.zeros((neurons, inputs), dtype=np.float64)
-        for row in range(self.W.shape[0]):
-            for col in range(self.W.shape[1]):
-                self.W[row, col] = random.uniform(0, 1)
-        
         self.b = np.random.randn(neurons, 1)
         self.activation = activation
         act = activation_functions.get(activation)

@@ -1,17 +1,11 @@
 import numpy as np
-import math
-
-from numpy.core.numeric import Inf, NaN
 
 def cross_entropy_loss(y, a):
-    result=0;
-    for i in range(0,len(y)):
-        result=result+y[i]*math.log2(a[i])
-    return -result
-
+    return np.multiply(y, -np.log(a)).sum(1)
 
 def d_cross_entropy_loss(y, a):
-    return 0
+    a[y.argmax()] -= 1
+    return a
 
 
 def log_loss(y, a):

@@ -1,12 +1,12 @@
 import numpy as np
 
 def softmax(x):
-    ex = np.exp(x)
+    ex = np.exp(x - np.max(x))
     return ex/ex.sum()
 
 
 def d_softmax(x):
-    ex=np.exp(x)
+    ex = np.exp(x - np.max(x))
     ex_sum=ex.sum()
     return ex/ex_sum*(1-ex/ex_sum)
 

@@ -19,7 +19,7 @@ def _flat_images(images):
 
 def main(argv):
 
-    num_train = 5
+    num_train = 2000
 
     print("Reading labels")
     labels = read_labels('res/training/train-labels-idx1-ubyte', num_train)
@@ -27,31 +27,23 @@ def main(argv):
     images = read_images('res/training/train-images-idx3-ubyte', num_train)
     
     flat_images = _flat_images(images)
-    print(np.max(flat_images))
     nn = Model([
-    (784, 128, 'tanh'),
+    (784, 128, 'relu'),
     (128, 10, 'softmax')],
-    'log',
-    0.05)
+    'cross_entropy',
+    0.1, 0.0001, 0.00001)
 
-    nn.train(flat_images, labels, 1, 1)
+    nn.train(flat_images, labels, 20, 8)
 
     print(np.max(nn.layers[0].W))
-    print(np.max(nn.layers[0].b))
-    print(np.max(nn.layers[1].W))
-    print(np.max(nn.layers[1].b))
     A = nn.feedforward(flat_images[0])
-    print(labels[0])
-    print(A)
+    print("Estimation:", A.argmax(), "| Ground Truth:", labels[0])
     A = nn.feedforward(flat_images[1])
-    print(labels[1])
-    print(A)
+    print("Estimation:", A.argmax(), "| Ground Truth:", labels[1])
     A = nn.feedforward(flat_images[2])
-    print(labels[2])
-    print(A)
+    print("Estimation:", A.argmax(), "| Ground Truth:", labels[2])
     A = nn.feedforward(flat_images[3])
-    print(labels[3])
-    print(A)
+    print("Estimation:", A.argmax(), "| Ground Truth:", labels[3])
 
 
 if __name__ == "__main__":

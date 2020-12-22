@@ -4,7 +4,7 @@ import random
 
 class Model(object):
 
-    def __init__(self, layers, loss, learning_rate):
+    def __init__(self, layers, loss, learning_rate, regL1, regL2):
         self.layers = []
         for idx in range(0, len(layers)):
             self.layers.append(Layer(layers[idx][0], layers[idx][1], layers[idx][2]))
@@ -15,6 +15,8 @@ class Model(object):
         self.d_loss = loss_arr[1]
 
         self.learning_rate = learning_rate
+        self.regL1 = regL1
+        self.regL2 = regL2
 
 
     def __repr__(self):
@@ -53,6 +55,14 @@ class Model(object):
                 curr_batch_size = batch_X.shape[0]
                 dA = np.zeros((len(self.layers[-1]), 1))
 
+
+                weight_sum : np.float64 = 0
+                weight_sum_sq : np.float64 = 0
+                for layer in self.layers:
+                    weight_sum += np.sum(np.abs(layer.W))
+                    weight_sum_sq += np.sum(layer.W**2)
+
+                loss = 0
                 for i in range(curr_batch_size):
                     c_X = batch_X[i]
                     
@@ -60,12 +70,10 @@ class Model(object):
                     c_y[batch_y[i]][0] = 1
                     
                     A = self.feedforward(c_X)
-                    
                     loss = self.d_loss(c_y, A)
-                    print(loss)
-                    dA = dA + loss
+                    dA += loss + self.regL1 * weight_sum + self.regL2 * weight_sum_sq
 
-                    #print(epoch + 1, ":", batch + 1, "-", i + 1, end='\r')
+                    print(epoch + 1, ":", batch + 1, "-", i + 1, end='\r')
                 
                 dA = dA / curr_batch_size
 
